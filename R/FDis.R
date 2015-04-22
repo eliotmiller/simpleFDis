@@ -1,3 +1,5 @@
+#' @export
+
 #this function determines the weighted centroid of each cloud of points and then
 #determines the mean absolute deviation (weighted) from each centroid per cloud
 

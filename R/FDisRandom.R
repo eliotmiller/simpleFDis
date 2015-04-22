@@ -1,3 +1,5 @@
+#' @export
+
 #this function explores how FDis changes with increasing observations. no road map is
 #needed, as it is generated within the function. samples is a vector over which the
 #exploration is desired

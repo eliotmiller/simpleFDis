@@ -1,3 +1,5 @@
+#' @export
+
 #this function returns the weighted centroids per cloud of points in multivariate space
 #given some ordination results and a road map telling which point belongs to which cluster
 #e.g. a file you have occasionally called "secondTable.csv"
