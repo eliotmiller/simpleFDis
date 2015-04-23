@@ -1,0 +1,1465 @@
+as.list(calcCenters)
+synthComm <- function(ordination.results, road.map)#
+{#
+	#calculate each species' centroid#
+	calcCenters <- centers(ordination.results, road.map)#
+	#split ordination results into single species and calculate the covariance matrix for#
+	#each, saving each matrix into an element of a list#
+#
+	covList <- list()#
+	for(i in 1:dim(road.map)[1])#
+	{#
+		indices <- names(roadMap[i,][roadMap[i,] != 0])#
+		tempPoints <- ordination.results[indices,]#
+		covList[[i]] <- cov(tempPoints)#
+	}#
+	#generate a multivariate normal distribution with these means and covariances for #
+	#each species#
+	distributions <- list()#
+	for(i in 1:length(covList))#
+	{#
+		distributions[[i]] <- mvrnorm(n=sum(road.map[i,] != 0), mu=calcCenters[i,],#
+			Sigma=covList[[i]])#
+	}#
+	#distributions <- lapply(covList, function(x) mvrnorm(n=sum(road.map[x,] != 0),#
+		mu=calcCenters[x,], Sigma=covList[[x]]))#
+	distributions#
+}
+synthComm <- function(ordination.results, road.map)#
+{#
+	#calculate each species' centroid#
+	calcCenters <- centers(ordination.results, road.map)#
+	#split ordination results into single species and calculate the covariance matrix for#
+	#each, saving each matrix into an element of a list#
+#
+	covList <- list()#
+	for(i in 1:dim(road.map)[1])#
+	{#
+		indices <- names(roadMap[i,][roadMap[i,] != 0])#
+		tempPoints <- ordination.results[indices,]#
+		covList[[i]] <- cov(tempPoints)#
+	}#
+	#generate a multivariate normal distribution with these means and covariances for #
+	#each species#
+	distributions <- list()#
+	for(i in 1:length(covList))#
+	{#
+		distributions[[i]] <- mvrnorm(n=sum(road.map[i,] != 0), mu=calcCenters[i,],#
+			Sigma=covList[[i]])#
+	}#
+	#distributions <- lapply(covList, function(x) mvrnorm(n=sum(road.map[x,] != 0),#
+	#	mu=calcCenters[x,], Sigma=covList[[x]]))#
+	distributions#
+}
+synthComm(totalNiche, roadMap)
+test <- synthComm(totalNiche, roadMap)
+system.time(test <- synthComm(totalNiche, roadMap))
+test2 <- Reduce(test, rbind)
+test2 <- Reduce(rbind, test)
+head(test2)
+plot(totalNiche[,2]~totalNiche[,1], col=sort(rep(1:6, 20)), pch=20)
+plot(test2[,2]~test2[,1], col=sort(rep(1:6, 20)), pch=20)
+plot(test2[,3]~test2[,2], col=sort(rep(1:6, 20)), pch=20)
+library(simpleFDis)#
+library(nicheROVER)#
+#
+#generate six species' niche spaces of 20 observations each in 3 dimensions#
+#
+centroids <- matrix(nrow=6, ncol=3, rep(seq(from = -2, to = 2, length.out=6), 3))#
+#
+#brute force the points#
+#
+output <- list()#
+#
+for(i in 1:6)#
+{#
+	temp1 <- rnorm(n=20, mean=centroids[i,1])#
+	temp2 <- rnorm(n=20, mean=centroids[i,2])#
+	temp3 <- rnorm(n=20, mean=centroids[i,3])#
+	output[[i]] <- data.frame(temp1, temp2, temp3)#
+}#
+#
+#this corresponds to something called ordination.results in functions#
+totalNiche <- Reduce(rbind, output)#
+#
+#plot the points to give some sense of what it looks like#
+#
+#plot(totalNiche[,3]~totalNiche[,2], col=sort(rep(1:6, 20)), pch=20)#
+#
+#create a road map for use#
+#
+roadMap <- matrix(nrow=6, ncol=120, 0)#
+#
+row.names(roadMap) <- unique(totalNiche$species)#
+#
+colnames(roadMap) <- 1:120#
+#
+roadMap[1,1:20] <- 1#
+roadMap[2,21:40] <- 1#
+roadMap[3,41:60] <- 1#
+roadMap[4,61:80] <- 1#
+roadMap[5,81:100] <- 1#
+roadMap[6,101:120] <- 1#
+synthComm <- function(ordination.results, road.map)#
+{#
+	#calculate each species' centroid#
+	calcCenters <- centers(ordination.results, road.map)#
+	#split ordination results into single species and calculate the covariance matrix for#
+	#each, saving each matrix into an element of a list#
+#
+	covList <- list()#
+	for(i in 1:dim(road.map)[1])#
+	{#
+		indices <- names(roadMap[i,][roadMap[i,] != 0])#
+		tempPoints <- ordination.results[indices,]#
+		covList[[i]] <- cov(tempPoints)#
+	}#
+	#generate a multivariate normal distribution with these means and covariances for #
+	#each species#
+	distributions <- list()#
+	for(i in 1:length(covList))#
+	{#
+		distributions[[i]] <- mvrnorm(n=sum(road.map[i,] != 0), mu=calcCenters[i,],#
+			Sigma=covList[[i]])#
+	}#
+	distributions#
+}
+test <- synthComm(totalNiche, roadMap)
+test2 <- Reduce(rbind, test)
+head(test2)
+??vcv
+centers(totalNiche, roadMap)
+dim(centers(totalNiche, roadMap))
+temp <- cov(centers(totalNiche, roadMap))
+temp
+test <- centers(totalNiche, roadMap)
+test
+test[,4] <- test[,3]
+rbind(test, test[,3])
+test <- cbind(test, test[,3])
+test
+cov(test)
+temp
+test <- centers(totalNiche, roadMap)
+mvrnorm(n=dim(test)[1], mu=test, Sigma=temp)
+mvrnorm(n=dim(test)[1], mu=test[1,], Sigma=temp)
+test
+apply(test, 2, mean)
+apply(test, 2, mean)->test2
+mvrnorm(n=dim(test)[1], mu=test2, Sigma=temp)
+372+269
+library(devtools)
+load_all()
+load_all()
+#generate six species' niche spaces of 20 observations each in 3 dimensions#
+#
+centroids <- matrix(nrow=6, ncol=3, rep(seq(from = -2, to = 2, length.out=6), 3))#
+#
+#brute force the points#
+#
+output <- list()#
+#
+for(i in 1:6)#
+{#
+	temp1 <- rnorm(n=20, mean=centroids[i,1])#
+	temp2 <- rnorm(n=20, mean=centroids[i,2])#
+	temp3 <- rnorm(n=20, mean=centroids[i,3])#
+	output[[i]] <- data.frame(temp1, temp2, temp3)#
+}#
+#
+#this corresponds to something called comm.space in functions#
+totalNiche <- Reduce(rbind, output)#
+#
+#plot the points to give some sense of what it looks like#
+#
+#plot(totalNiche[,3]~totalNiche[,2], col=sort(rep(1:6, 20)), pch=20)#
+#
+#create a road map for use#
+#
+roadMap <- matrix(nrow=6, ncol=120, 0)#
+#
+row.names(roadMap) <- unique(totalNiche$species)#
+#
+colnames(roadMap) <- 1:120#
+#
+roadMap[1,1:20] <- 1#
+roadMap[2,21:40] <- 1#
+roadMap[3,41:60] <- 1#
+roadMap[4,61:80] <- 1#
+roadMap[5,81:100] <- 1#
+roadMap[6,101:120] <- 1#
+#
+row.names(roadMap) <- paste("species", 1:6, sep="")#
+#
+temp <- synthComm(totalNiche, roadMap)
+temp
+fake.cdm <- data.frame(species1=10, species2=11, species3=12, species4=13, species5=14,#
+	species6=15)
+fake.cdm
+fakeCDM <- data.frame(species1=10, species2=11, species3=12, species4=13, species5=14,#
+	species6=15)
+fakeCDM
+fakeCDM <- data.frame(species1=10, species2=11, species3=12, species4=13, species5=14,#
+	species6=15)
+fakeCDm
+fakeCDM
+test <- synthPairwise(comm.cdm=fakeCDM, comm.space=totalNiche, comm.map=roadMap,#
+	cov.matrix=NULL, nsamples=10, nprob=10, alpha=0.95, abundance.weighted="interspecific")
+test
+#generate six species' niche spaces of 20 observations each in 3 dimensions#
+#
+centroids <- matrix(nrow=6, ncol=3, rep(seq(from = -2, to = 2, length.out=6), 3))#
+#
+#brute force the points#
+#
+output <- list()#
+#
+for(i in 1:6)#
+{#
+	temp1 <- rnorm(n=20, mean=centroids[i,1])#
+	temp2 <- rnorm(n=20, mean=centroids[i,2])#
+	temp3 <- rnorm(n=20, mean=centroids[i,3])#
+	output[[i]] <- data.frame(temp1, temp2, temp3)#
+}#
+#
+#this corresponds to something called comm.space in functions#
+totalNiche <- Reduce(rbind, output)#
+#
+#plot the points to give some sense of what it looks like#
+#
+#plot(totalNiche[,3]~totalNiche[,2], col=sort(rep(1:6, 20)), pch=20)#
+#
+#create a road map for use#
+#
+roadMap <- matrix(nrow=6, ncol=120, 0)#
+#
+row.names(roadMap) <- unique(totalNiche$species)#
+#
+colnames(roadMap) <- 1:120#
+#
+roadMap[1,1:20] <- 1#
+roadMap[2,21:40] <- 1#
+roadMap[3,41:60] <- 1#
+roadMap[4,61:80] <- 1#
+roadMap[5,81:100] <- 1#
+roadMap[6,101:120] <- 1#
+#
+row.names(roadMap) <- paste("species", 1:6, sep="")#
+#
+temp <- synthComm(totalNiche, roadMap)#
+#
+fakeCDM <- data.frame(species1=10, species2=11, species3=12, species4=13, species5=14,#
+	species6=15)#
+#
+test <- synthPairwise(comm.cdm=fakeCDM, comm.space=totalNiche, comm.map=roadMap,#
+	cov.matrix=NULL, nsamples=10, nprob=10, alpha=0.95, abundance.weighted="interspecific")
+test
+#generate six species' niche spaces of 20 observations each in 3 dimensions#
+#
+centroids <- matrix(nrow=6, ncol=3, rep(seq(from = -2, to = 2, length.out=6), 3))#
+#
+#brute force the points#
+#
+output <- list()#
+#
+for(i in 1:6)#
+{#
+	temp1 <- rnorm(n=20, mean=centroids[i,1])#
+	temp2 <- rnorm(n=20, mean=centroids[i,2])#
+	temp3 <- rnorm(n=20, mean=centroids[i,3])#
+	output[[i]] <- data.frame(temp1, temp2, temp3)#
+}#
+#
+#this corresponds to something called comm.space in functions#
+totalNiche <- Reduce(rbind, output)#
+#
+#plot the points to give some sense of what it looks like#
+#
+#plot(totalNiche[,3]~totalNiche[,2], col=sort(rep(1:6, 20)), pch=20)#
+#
+#create a road map for use#
+#
+roadMap <- matrix(nrow=6, ncol=120, 0)#
+#
+row.names(roadMap) <- unique(totalNiche$species)#
+#
+colnames(roadMap) <- 1:120#
+#
+roadMap[1,1:20] <- 1#
+roadMap[2,21:40] <- 1#
+roadMap[3,41:60] <- 1#
+roadMap[4,61:80] <- 1#
+roadMap[5,81:100] <- 1#
+roadMap[6,101:120] <- 1#
+#
+row.names(roadMap) <- paste("species", 1:6, sep="")#
+#
+temp <- synthComm(totalNiche, roadMap)#
+#
+fakeCDM <- data.frame(species1=10, species2=11, species3=12, species4=13, species5=14,#
+	species6=15)#
+#
+test <- synthPairwise(comm.cdm=fakeCDM, comm.space=totalNiche, comm.map=roadMap,#
+	cov.matrix=NULL, nsamples=10, nprob=10, alpha=0.95, abundance.weighted="interspecific")#
+#
+test
+#generate six species' niche spaces of 20 observations each in 3 dimensions#
+#
+centroids <- matrix(nrow=6, ncol=3, rep(seq(from = -2, to = 2, length.out=6), 3))#
+#
+#brute force the points#
+#
+output <- list()#
+#
+for(i in 1:6)#
+{#
+	temp1 <- rnorm(n=20, mean=centroids[i,1])#
+	temp2 <- rnorm(n=20, mean=centroids[i,2])#
+	temp3 <- rnorm(n=20, mean=centroids[i,3])#
+	output[[i]] <- data.frame(temp1, temp2, temp3)#
+}#
+#
+#this corresponds to something called comm.space in functions#
+totalNiche <- Reduce(rbind, output)#
+#
+#plot the points to give some sense of what it looks like#
+#
+#plot(totalNiche[,3]~totalNiche[,2], col=sort(rep(1:6, 20)), pch=20)#
+#
+#create a road map for use#
+#
+roadMap <- matrix(nrow=6, ncol=120, 0)#
+#
+row.names(roadMap) <- unique(totalNiche$species)#
+#
+colnames(roadMap) <- 1:120#
+#
+roadMap[1,1:20] <- 1#
+roadMap[2,21:40] <- 1#
+roadMap[3,41:60] <- 1#
+roadMap[4,61:80] <- 1#
+roadMap[5,81:100] <- 1#
+roadMap[6,101:120] <- 1#
+#
+row.names(roadMap) <- paste("species", 1:6, sep="")#
+#
+temp <- synthComm(totalNiche, roadMap)#
+#
+fakeCDM <- data.frame(species1=10, species2=11, species3=12, species4=13, species5=14,#
+	species6=15)#
+#
+test <- synthPairwise(comm.cdm=fakeCDM, comm.space=totalNiche, comm.map=roadMap,#
+	cov.matrix=NULL, nsamples=10, nprob=10, alpha=0.95, abundance.weighted="interspecific")#
+#
+test
+#generate six species' niche spaces of 20 observations each in 3 dimensions#
+#
+centroids <- matrix(nrow=6, ncol=3, rep(seq(from = -2, to = 2, length.out=6), 3))#
+#
+#brute force the points#
+#
+output <- list()#
+#
+for(i in 1:6)#
+{#
+	temp1 <- rnorm(n=20, mean=centroids[i,1])#
+	temp2 <- rnorm(n=20, mean=centroids[i,2])#
+	temp3 <- rnorm(n=20, mean=centroids[i,3])#
+	output[[i]] <- data.frame(temp1, temp2, temp3)#
+}#
+#
+#this corresponds to something called comm.space in functions#
+totalNiche <- Reduce(rbind, output)#
+#
+#plot the points to give some sense of what it looks like#
+#
+#plot(totalNiche[,3]~totalNiche[,2], col=sort(rep(1:6, 20)), pch=20)#
+#
+#create a road map for use#
+#
+roadMap <- matrix(nrow=6, ncol=120, 0)#
+#
+row.names(roadMap) <- unique(totalNiche$species)#
+#
+colnames(roadMap) <- 1:120#
+#
+roadMap[1,1:20] <- 1#
+roadMap[2,21:40] <- 1#
+roadMap[3,41:60] <- 1#
+roadMap[4,61:80] <- 1#
+roadMap[5,81:100] <- 1#
+roadMap[6,101:120] <- 1#
+#
+row.names(roadMap) <- paste("species", 1:6, sep="")#
+#
+temp <- synthComm(totalNiche, roadMap)#
+#
+fakeCDM <- data.frame(species1=10, species2=11, species3=12, species4=13, species5=14,#
+	species6=15)#
+#
+test <- synthPairwise(comm.cdm=fakeCDM, comm.space=totalNiche, comm.map=roadMap,#
+	cov.matrix=NULL, nsamples=10, nprob=10, alpha=0.95, abundance.weighted="interspecific")#
+#
+test
+#generate six species' niche spaces of 20 observations each in 3 dimensions#
+#
+centroids <- matrix(nrow=6, ncol=3, rep(seq(from = -2, to = 2, length.out=6), 3))#
+#
+#brute force the points#
+#
+output <- list()#
+#
+for(i in 1:6)#
+{#
+	temp1 <- rnorm(n=20, mean=centroids[i,1])#
+	temp2 <- rnorm(n=20, mean=centroids[i,2])#
+	temp3 <- rnorm(n=20, mean=centroids[i,3])#
+	output[[i]] <- data.frame(temp1, temp2, temp3)#
+}#
+#
+#this corresponds to something called comm.space in functions#
+totalNiche <- Reduce(rbind, output)#
+#
+#plot the points to give some sense of what it looks like#
+#
+#plot(totalNiche[,3]~totalNiche[,2], col=sort(rep(1:6, 20)), pch=20)#
+#
+#create a road map for use#
+#
+roadMap <- matrix(nrow=6, ncol=120, 0)#
+#
+row.names(roadMap) <- unique(totalNiche$species)#
+#
+colnames(roadMap) <- 1:120#
+#
+roadMap[1,1:20] <- 1#
+roadMap[2,21:40] <- 1#
+roadMap[3,41:60] <- 1#
+roadMap[4,61:80] <- 1#
+roadMap[5,81:100] <- 1#
+roadMap[6,101:120] <- 1#
+#
+row.names(roadMap) <- paste("species", 1:6, sep="")#
+#
+temp <- synthComm(totalNiche, roadMap)#
+#
+fakeCDM <- data.frame(species1=10, species2=11, species3=12, species4=13, species5=14,#
+	species6=15)#
+#
+test <- synthPairwise(comm.cdm=fakeCDM, comm.space=totalNiche, comm.map=roadMap,#
+	cov.matrix=NULL, nsamples=10, nprob=10, alpha=0.95, abundance.weighted="interspecific")#
+#
+test
+#generate six species' niche spaces of 20 observations each in 3 dimensions#
+#
+centroids <- matrix(nrow=6, ncol=3, rep(seq(from = -2, to = 2, length.out=6), 3))#
+#
+#brute force the points#
+#
+output <- list()#
+#
+for(i in 1:6)#
+{#
+	temp1 <- rnorm(n=20, mean=centroids[i,1])#
+	temp2 <- rnorm(n=20, mean=centroids[i,2])#
+	temp3 <- rnorm(n=20, mean=centroids[i,3])#
+	output[[i]] <- data.frame(temp1, temp2, temp3)#
+}#
+#
+#this corresponds to something called comm.space in functions#
+totalNiche <- Reduce(rbind, output)#
+#
+#plot the points to give some sense of what it looks like#
+#
+#plot(totalNiche[,3]~totalNiche[,2], col=sort(rep(1:6, 20)), pch=20)#
+#
+#create a road map for use#
+#
+roadMap <- matrix(nrow=6, ncol=120, 0)#
+#
+row.names(roadMap) <- unique(totalNiche$species)#
+#
+colnames(roadMap) <- 1:120#
+#
+roadMap[1,1:20] <- 1#
+roadMap[2,21:40] <- 1#
+roadMap[3,41:60] <- 1#
+roadMap[4,61:80] <- 1#
+roadMap[5,81:100] <- 1#
+roadMap[6,101:120] <- 1#
+#
+row.names(roadMap) <- paste("species", 1:6, sep="")#
+#
+temp <- synthComm(totalNiche, roadMap)#
+#
+fakeCDM <- data.frame(species1=10, species2=11, species3=12, species4=13, species5=14,#
+	species6=15)#
+#
+test <- synthPairwise(comm.cdm=fakeCDM, comm.space=totalNiche, comm.map=roadMap,#
+	cov.matrix=NULL, nsamples=10, nprob=10, alpha=0.95, abundance.weighted="interspecific")#
+#
+test
+#generate six species' niche spaces of 20 observations each in 3 dimensions#
+#
+centroids <- matrix(nrow=6, ncol=3, rep(seq(from = -2, to = 2, length.out=6), 3))#
+#
+#brute force the points#
+#
+output <- list()#
+#
+for(i in 1:6)#
+{#
+	temp1 <- rnorm(n=20, mean=centroids[i,1])#
+	temp2 <- rnorm(n=20, mean=centroids[i,2])#
+	temp3 <- rnorm(n=20, mean=centroids[i,3])#
+	output[[i]] <- data.frame(temp1, temp2, temp3)#
+}#
+#
+#this corresponds to something called comm.space in functions#
+totalNiche <- Reduce(rbind, output)#
+#
+#plot the points to give some sense of what it looks like#
+#
+#plot(totalNiche[,3]~totalNiche[,2], col=sort(rep(1:6, 20)), pch=20)#
+#
+#create a road map for use#
+#
+roadMap <- matrix(nrow=6, ncol=120, 0)#
+#
+row.names(roadMap) <- unique(totalNiche$species)#
+#
+colnames(roadMap) <- 1:120#
+#
+roadMap[1,1:20] <- 1#
+roadMap[2,21:40] <- 1#
+roadMap[3,41:60] <- 1#
+roadMap[4,61:80] <- 1#
+roadMap[5,81:100] <- 1#
+roadMap[6,101:120] <- 1#
+#
+row.names(roadMap) <- paste("species", 1:6, sep="")#
+#
+temp <- synthComm(totalNiche, roadMap)#
+#
+fakeCDM <- data.frame(species1=10, species2=11, species3=12, species4=13, species5=14,#
+	species6=15)#
+#
+test <- synthPairwise(comm.cdm=fakeCDM, comm.space=totalNiche, comm.map=roadMap,#
+	cov.matrix=NULL, nsamples=10, nprob=10, alpha=0.95, abundance.weighted="interspecific")#
+#
+test
+#generate six species' niche spaces of 20 observations each in 3 dimensions#
+#
+centroids <- matrix(nrow=6, ncol=3, rep(seq(from = -2, to = 2, length.out=6), 3))#
+#
+#brute force the points#
+#
+output <- list()#
+#
+for(i in 1:6)#
+{#
+	temp1 <- rnorm(n=20, mean=centroids[i,1])#
+	temp2 <- rnorm(n=20, mean=centroids[i,2])#
+	temp3 <- rnorm(n=20, mean=centroids[i,3])#
+	output[[i]] <- data.frame(temp1, temp2, temp3)#
+}#
+#
+#this corresponds to something called comm.space in functions#
+totalNiche <- Reduce(rbind, output)#
+#
+#plot the points to give some sense of what it looks like#
+#
+#plot(totalNiche[,3]~totalNiche[,2], col=sort(rep(1:6, 20)), pch=20)#
+#
+#create a road map for use#
+#
+roadMap <- matrix(nrow=6, ncol=120, 0)#
+#
+row.names(roadMap) <- unique(totalNiche$species)#
+#
+colnames(roadMap) <- 1:120#
+#
+roadMap[1,1:20] <- 1#
+roadMap[2,21:40] <- 1#
+roadMap[3,41:60] <- 1#
+roadMap[4,61:80] <- 1#
+roadMap[5,81:100] <- 1#
+roadMap[6,101:120] <- 1#
+#
+row.names(roadMap) <- paste("species", 1:6, sep="")#
+#
+temp <- synthComm(totalNiche, roadMap)#
+#
+fakeCDM <- data.frame(species1=10, species2=11, species3=12, species4=13, species5=14,#
+	species6=15)#
+#
+test <- synthPairwise(comm.cdm=fakeCDM, comm.space=totalNiche, comm.map=roadMap,#
+	cov.matrix=NULL, nsamples=10, nprob=10, alpha=0.95, abundance.weighted="interspecific")#
+#
+test
+#generate six species' niche spaces of 20 observations each in 3 dimensions#
+#
+centroids <- matrix(nrow=6, ncol=3, rep(seq(from = -2, to = 2, length.out=6), 3))#
+#
+#brute force the points#
+#
+output <- list()#
+#
+for(i in 1:6)#
+{#
+	temp1 <- rnorm(n=20, mean=centroids[i,1])#
+	temp2 <- rnorm(n=20, mean=centroids[i,2])#
+	temp3 <- rnorm(n=20, mean=centroids[i,3])#
+	output[[i]] <- data.frame(temp1, temp2, temp3)#
+}#
+#
+#this corresponds to something called comm.space in functions#
+totalNiche <- Reduce(rbind, output)#
+#
+#plot the points to give some sense of what it looks like#
+#
+#plot(totalNiche[,3]~totalNiche[,2], col=sort(rep(1:6, 20)), pch=20)#
+#
+#create a road map for use#
+#
+roadMap <- matrix(nrow=6, ncol=120, 0)#
+#
+row.names(roadMap) <- unique(totalNiche$species)#
+#
+colnames(roadMap) <- 1:120#
+#
+roadMap[1,1:20] <- 1#
+roadMap[2,21:40] <- 1#
+roadMap[3,41:60] <- 1#
+roadMap[4,61:80] <- 1#
+roadMap[5,81:100] <- 1#
+roadMap[6,101:120] <- 1#
+#
+row.names(roadMap) <- paste("species", 1:6, sep="")#
+#
+temp <- synthComm(totalNiche, roadMap)#
+#
+fakeCDM <- data.frame(species1=10, species2=11, species3=12, species4=13, species5=14,#
+	species6=15)#
+#
+test <- synthPairwise(comm.cdm=fakeCDM, comm.space=totalNiche, comm.map=roadMap,#
+	cov.matrix=NULL, nsamples=10, nprob=10, alpha=0.95, abundance.weighted="interspecific")#
+#
+test
+#generate six species' niche spaces of 20 observations each in 3 dimensions#
+#
+centroids <- matrix(nrow=6, ncol=3, rep(seq(from = -2, to = 2, length.out=6), 3))#
+#
+#brute force the points#
+#
+output <- list()#
+#
+for(i in 1:6)#
+{#
+	temp1 <- rnorm(n=20, mean=centroids[i,1])#
+	temp2 <- rnorm(n=20, mean=centroids[i,2])#
+	temp3 <- rnorm(n=20, mean=centroids[i,3])#
+	output[[i]] <- data.frame(temp1, temp2, temp3)#
+}#
+#
+#this corresponds to something called comm.space in functions#
+totalNiche <- Reduce(rbind, output)#
+#
+#plot the points to give some sense of what it looks like#
+#
+#plot(totalNiche[,3]~totalNiche[,2], col=sort(rep(1:6, 20)), pch=20)#
+#
+#create a road map for use#
+#
+roadMap <- matrix(nrow=6, ncol=120, 0)#
+#
+row.names(roadMap) <- unique(totalNiche$species)#
+#
+colnames(roadMap) <- 1:120#
+#
+roadMap[1,1:20] <- 1#
+roadMap[2,21:40] <- 1#
+roadMap[3,41:60] <- 1#
+roadMap[4,61:80] <- 1#
+roadMap[5,81:100] <- 1#
+roadMap[6,101:120] <- 1#
+#
+row.names(roadMap) <- paste("species", 1:6, sep="")#
+#
+temp <- synthComm(totalNiche, roadMap)#
+#
+fakeCDM <- data.frame(species1=10, species2=11, species3=12, species4=13, species5=14,#
+	species6=15)#
+#
+test <- synthPairwise(comm.cdm=fakeCDM, comm.space=totalNiche, comm.map=roadMap,#
+	cov.matrix=NULL, nsamples=10, nprob=10, alpha=0.95, abundance.weighted="interspecific")#
+#
+test
+#generate six species' niche spaces of 20 observations each in 3 dimensions#
+#
+centroids <- matrix(nrow=6, ncol=3, rep(seq(from = -2, to = 2, length.out=6), 3))#
+#
+#brute force the points#
+#
+output <- list()#
+#
+for(i in 1:6)#
+{#
+	temp1 <- rnorm(n=20, mean=centroids[i,1])#
+	temp2 <- rnorm(n=20, mean=centroids[i,2])#
+	temp3 <- rnorm(n=20, mean=centroids[i,3])#
+	output[[i]] <- data.frame(temp1, temp2, temp3)#
+}#
+#
+#this corresponds to something called comm.space in functions#
+totalNiche <- Reduce(rbind, output)#
+#
+#plot the points to give some sense of what it looks like#
+#
+#plot(totalNiche[,3]~totalNiche[,2], col=sort(rep(1:6, 20)), pch=20)#
+#
+#create a road map for use#
+#
+roadMap <- matrix(nrow=6, ncol=120, 0)#
+#
+row.names(roadMap) <- unique(totalNiche$species)#
+#
+colnames(roadMap) <- 1:120#
+#
+roadMap[1,1:20] <- 1#
+roadMap[2,21:40] <- 1#
+roadMap[3,41:60] <- 1#
+roadMap[4,61:80] <- 1#
+roadMap[5,81:100] <- 1#
+roadMap[6,101:120] <- 1#
+#
+row.names(roadMap) <- paste("species", 1:6, sep="")#
+#
+temp <- synthComm(totalNiche, roadMap)#
+#
+fakeCDM <- data.frame(species1=10, species2=11, species3=12, species4=13, species5=14,#
+	species6=15)#
+#
+test <- synthPairwise(comm.cdm=fakeCDM, comm.space=totalNiche, comm.map=roadMap,#
+	cov.matrix=NULL, nsamples=10, nprob=10, alpha=0.95, abundance.weighted="interspecific")#
+#
+test
+#generate six species' niche spaces of 20 observations each in 3 dimensions#
+#
+centroids <- matrix(nrow=6, ncol=3, rep(seq(from = -2, to = 2, length.out=6), 3))#
+#
+#brute force the points#
+#
+output <- list()#
+#
+for(i in 1:6)#
+{#
+	temp1 <- rnorm(n=20, mean=centroids[i,1])#
+	temp2 <- rnorm(n=20, mean=centroids[i,2])#
+	temp3 <- rnorm(n=20, mean=centroids[i,3])#
+	output[[i]] <- data.frame(temp1, temp2, temp3)#
+}#
+#
+#this corresponds to something called comm.space in functions#
+totalNiche <- Reduce(rbind, output)#
+#
+#plot the points to give some sense of what it looks like#
+#
+#plot(totalNiche[,3]~totalNiche[,2], col=sort(rep(1:6, 20)), pch=20)#
+#
+#create a road map for use#
+#
+roadMap <- matrix(nrow=6, ncol=120, 0)#
+#
+row.names(roadMap) <- unique(totalNiche$species)#
+#
+colnames(roadMap) <- 1:120#
+#
+roadMap[1,1:20] <- 1#
+roadMap[2,21:40] <- 1#
+roadMap[3,41:60] <- 1#
+roadMap[4,61:80] <- 1#
+roadMap[5,81:100] <- 1#
+roadMap[6,101:120] <- 1#
+#
+row.names(roadMap) <- paste("species", 1:6, sep="")#
+#
+temp <- synthComm(totalNiche, roadMap)#
+#
+fakeCDM <- data.frame(species1=10, species2=11, species3=12, species4=13, species5=14,#
+	species6=15)#
+#
+test <- synthPairwise(comm.cdm=fakeCDM, comm.space=totalNiche, comm.map=roadMap,#
+	cov.matrix=NULL, nsamples=10, nprob=10, alpha=0.95, abundance.weighted="interspecific")#
+#
+test
+#generate six species' niche spaces of 20 observations each in 3 dimensions#
+#
+centroids <- matrix(nrow=6, ncol=3, rep(seq(from = -2, to = 2, length.out=6), 3))#
+#
+#brute force the points#
+#
+output <- list()#
+#
+for(i in 1:6)#
+{#
+	temp1 <- rnorm(n=20, mean=centroids[i,1])#
+	temp2 <- rnorm(n=20, mean=centroids[i,2])#
+	temp3 <- rnorm(n=20, mean=centroids[i,3])#
+	output[[i]] <- data.frame(temp1, temp2, temp3)#
+}#
+#
+#this corresponds to something called comm.space in functions#
+totalNiche <- Reduce(rbind, output)#
+#
+#plot the points to give some sense of what it looks like#
+#
+#plot(totalNiche[,3]~totalNiche[,2], col=sort(rep(1:6, 20)), pch=20)#
+#
+#create a road map for use#
+#
+roadMap <- matrix(nrow=6, ncol=120, 0)#
+#
+row.names(roadMap) <- unique(totalNiche$species)#
+#
+colnames(roadMap) <- 1:120#
+#
+roadMap[1,1:20] <- 1#
+roadMap[2,21:40] <- 1#
+roadMap[3,41:60] <- 1#
+roadMap[4,61:80] <- 1#
+roadMap[5,81:100] <- 1#
+roadMap[6,101:120] <- 1#
+#
+row.names(roadMap) <- paste("species", 1:6, sep="")#
+#
+temp <- synthComm(totalNiche, roadMap)#
+#
+fakeCDM <- data.frame(species1=10, species2=11, species3=12, species4=13, species5=14,#
+	species6=15)#
+#
+test <- synthPairwise(comm.cdm=fakeCDM, comm.space=totalNiche, comm.map=roadMap,#
+	cov.matrix=NULL, nsamples=10, nprob=10, alpha=0.95, abundance.weighted="interspecific")#
+#
+test
+#generate six species' niche spaces of 20 observations each in 3 dimensions#
+#
+centroids <- matrix(nrow=6, ncol=3, rep(seq(from = -2, to = 2, length.out=6), 3))#
+#
+#brute force the points#
+#
+output <- list()#
+#
+for(i in 1:6)#
+{#
+	temp1 <- rnorm(n=20, mean=centroids[i,1])#
+	temp2 <- rnorm(n=20, mean=centroids[i,2])#
+	temp3 <- rnorm(n=20, mean=centroids[i,3])#
+	output[[i]] <- data.frame(temp1, temp2, temp3)#
+}#
+#
+#this corresponds to something called comm.space in functions#
+totalNiche <- Reduce(rbind, output)#
+#
+#plot the points to give some sense of what it looks like#
+#
+#plot(totalNiche[,3]~totalNiche[,2], col=sort(rep(1:6, 20)), pch=20)#
+#
+#create a road map for use#
+#
+roadMap <- matrix(nrow=6, ncol=120, 0)#
+#
+row.names(roadMap) <- unique(totalNiche$species)#
+#
+colnames(roadMap) <- 1:120#
+#
+roadMap[1,1:20] <- 1#
+roadMap[2,21:40] <- 1#
+roadMap[3,41:60] <- 1#
+roadMap[4,61:80] <- 1#
+roadMap[5,81:100] <- 1#
+roadMap[6,101:120] <- 1#
+#
+row.names(roadMap) <- paste("species", 1:6, sep="")#
+#
+temp <- synthComm(totalNiche, roadMap)#
+#
+fakeCDM <- data.frame(species1=10, species2=11, species3=12, species4=13, species5=14,#
+	species6=15)#
+#
+test <- synthPairwise(comm.cdm=fakeCDM, comm.space=totalNiche, comm.map=roadMap,#
+	cov.matrix=NULL, nsamples=10, nprob=10, alpha=0.95, abundance.weighted="interspecific")#
+#
+test
+#generate six species' niche spaces of 20 observations each in 3 dimensions#
+#
+centroids <- matrix(nrow=6, ncol=3, rep(seq(from = -2, to = 2, length.out=6), 3))#
+#
+#brute force the points#
+#
+output <- list()#
+#
+for(i in 1:6)#
+{#
+	temp1 <- rnorm(n=20, mean=centroids[i,1])#
+	temp2 <- rnorm(n=20, mean=centroids[i,2])#
+	temp3 <- rnorm(n=20, mean=centroids[i,3])#
+	output[[i]] <- data.frame(temp1, temp2, temp3)#
+}#
+#
+#this corresponds to something called comm.space in functions#
+totalNiche <- Reduce(rbind, output)#
+#
+#plot the points to give some sense of what it looks like#
+#
+#plot(totalNiche[,3]~totalNiche[,2], col=sort(rep(1:6, 20)), pch=20)#
+#
+#create a road map for use#
+#
+roadMap <- matrix(nrow=6, ncol=120, 0)#
+#
+row.names(roadMap) <- unique(totalNiche$species)#
+#
+colnames(roadMap) <- 1:120#
+#
+roadMap[1,1:20] <- 1#
+roadMap[2,21:40] <- 1#
+roadMap[3,41:60] <- 1#
+roadMap[4,61:80] <- 1#
+roadMap[5,81:100] <- 1#
+roadMap[6,101:120] <- 1#
+#
+row.names(roadMap) <- paste("species", 1:6, sep="")#
+#
+temp <- synthComm(totalNiche, roadMap)#
+#
+fakeCDM <- data.frame(species1=10, species2=11, species3=12, species4=13, species5=14,#
+	species6=15)#
+#
+test <- synthPairwise(comm.cdm=fakeCDM, comm.space=totalNiche, comm.map=roadMap,#
+	cov.matrix=NULL, nsamples=100, nprob=100, alpha=0.95, abundance.weighted="interspecific")#
+#
+test
+#generate six species' niche spaces of 20 observations each in 3 dimensions#
+#
+centroids <- matrix(nrow=6, ncol=3, rep(seq(from = -2, to = 2, length.out=6), 3))#
+#
+#brute force the points#
+#
+output <- list()#
+#
+for(i in 1:6)#
+{#
+	temp1 <- rnorm(n=20, mean=centroids[i,1])#
+	temp2 <- rnorm(n=20, mean=centroids[i,2])#
+	temp3 <- rnorm(n=20, mean=centroids[i,3])#
+	output[[i]] <- data.frame(temp1, temp2, temp3)#
+}#
+#
+#this corresponds to something called comm.space in functions#
+totalNiche <- Reduce(rbind, output)#
+#
+#plot the points to give some sense of what it looks like#
+#
+#plot(totalNiche[,3]~totalNiche[,2], col=sort(rep(1:6, 20)), pch=20)#
+#
+#create a road map for use#
+#
+roadMap <- matrix(nrow=6, ncol=120, 0)#
+#
+row.names(roadMap) <- unique(totalNiche$species)#
+#
+colnames(roadMap) <- 1:120#
+#
+roadMap[1,1:20] <- 1#
+roadMap[2,21:40] <- 1#
+roadMap[3,41:60] <- 1#
+roadMap[4,61:80] <- 1#
+roadMap[5,81:100] <- 1#
+roadMap[6,101:120] <- 1#
+#
+row.names(roadMap) <- paste("species", 1:6, sep="")#
+#
+temp <- synthComm(totalNiche, roadMap)#
+#
+fakeCDM <- data.frame(species1=10, species2=11, species3=12, species4=13, species5=14,#
+	species6=15)#
+#
+test <- synthPairwise(comm.cdm=fakeCDM, comm.space=totalNiche, comm.map=roadMap,#
+	cov.matrix=NULL, nsamples=1000, nprob=1000, alpha=0.95, abundance.weighted="interspecific")#
+#
+test
+#generate six species' niche spaces of 20 observations each in 3 dimensions#
+#
+centroids <- matrix(nrow=6, ncol=3, rep(seq(from = -2, to = 2, length.out=6), 3))#
+#
+#brute force the points#
+#
+output <- list()#
+#
+for(i in 1:6)#
+{#
+	temp1 <- rnorm(n=20, mean=centroids[i,1])#
+	temp2 <- rnorm(n=20, mean=centroids[i,2])#
+	temp3 <- rnorm(n=20, mean=centroids[i,3])#
+	output[[i]] <- data.frame(temp1, temp2, temp3)#
+}#
+#
+#this corresponds to something called comm.space in functions#
+totalNiche <- Reduce(rbind, output)#
+#
+#plot the points to give some sense of what it looks like#
+#
+#plot(totalNiche[,3]~totalNiche[,2], col=sort(rep(1:6, 20)), pch=20)#
+#
+#create a road map for use#
+#
+roadMap <- matrix(nrow=6, ncol=120, 0)#
+#
+row.names(roadMap) <- unique(totalNiche$species)#
+#
+colnames(roadMap) <- 1:120#
+#
+roadMap[1,1:20] <- 1#
+roadMap[2,21:40] <- 1#
+roadMap[3,41:60] <- 1#
+roadMap[4,61:80] <- 1#
+roadMap[5,81:100] <- 1#
+roadMap[6,101:120] <- 1#
+#
+row.names(roadMap) <- paste("species", 1:6, sep="")#
+#
+temp <- synthComm(totalNiche, roadMap)#
+#
+fakeCDM <- data.frame(species1=10, species2=11, species3=12, species4=13, species5=14,#
+	species6=15)#
+#
+test <- synthPairwise(comm.cdm=fakeCDM, comm.space=totalNiche, comm.map=roadMap,#
+	cov.matrix=NULL, nsamples=1000, nprob=1000, alpha=0.95, abundance.weighted="interspecific")#
+#
+test
+fakeCDM
+fakeCDM$species7 <- 0
+fakeCDM
+fakeCDM==0
+fakeCDM!=0
+fakeCDM[fakeCDM!=0]
+fakeCDM[fakeCDM!=0,]
+fakeCDM[,fakeCDM!=0]
+head(totalNiche)
+head(roadMap)
+names(fakeCDM[,fakeCDM!=0])
+head(nicheSpace)
+head(totalSpace)
+head(totalNiche)
+names(roadMap)
+colnames(roadMap)
+roadMap <- cbind(roadMap, rep(1,6))
+roadMap
+colnames(roadMap)[121]
+colnames(roadMap)[121] <- 121
+roadMap
+roadMap$121
+roadMap[,121]
+roadMap[,121] <- 0
+roadMap
+apply(roadMap, 2, sum)
+apply(roadMap, 2, sum) != 0
+roadMap <- roadMap[,apply(roadMap, 2, sum) != 0]
+roadMap
+head(totalNiche)
+centroids <- matrix(nrow=6, ncol=3, rep(seq(from = -2, to = 2, length.out=6), 3))#
+#
+#brute force the points#
+#
+output <- list()#
+#
+for(i in 1:6)#
+{#
+	temp1 <- rnorm(n=20, mean=centroids[i,1])#
+	temp2 <- rnorm(n=20, mean=centroids[i,2])#
+	temp3 <- rnorm(n=20, mean=centroids[i,3])#
+	output[[i]] <- data.frame(temp1, temp2, temp3)#
+}#
+#
+#this corresponds to something called comm.space in functions#
+totalNiche <- Reduce(rbind, output)#
+#
+#plot the points to give some sense of what it looks like#
+#
+#plot(totalNiche[,3]~totalNiche[,2], col=sort(rep(1:6, 20)), pch=20)#
+#
+#create a road map for use#
+#
+roadMap <- matrix(nrow=6, ncol=120, 0)#
+#
+row.names(roadMap) <- unique(totalNiche$species)#
+#
+colnames(roadMap) <- 1:120#
+#
+roadMap[1,1:20] <- 1#
+roadMap[2,21:40] <- 1#
+roadMap[3,41:60] <- 1#
+roadMap[4,61:80] <- 1#
+roadMap[5,81:100] <- 1#
+roadMap[6,101:120] <- 1#
+#
+row.names(roadMap) <- paste("species", 1:6, sep="")
+roadMap
+roadMap <- as.data.frame(roadMap)
+roadMap
+temp <- synthComm(totalNiche, roadMap)
+#generate six species' niche spaces of 20 observations each in 3 dimensions#
+#
+centroids <- matrix(nrow=6, ncol=3, rep(seq(from = -2, to = 2, length.out=6), 3))#
+#
+#brute force the points#
+#
+output <- list()#
+#
+for(i in 1:6)#
+{#
+	temp1 <- rnorm(n=20, mean=centroids[i,1])#
+	temp2 <- rnorm(n=20, mean=centroids[i,2])#
+	temp3 <- rnorm(n=20, mean=centroids[i,3])#
+	output[[i]] <- data.frame(temp1, temp2, temp3)#
+}#
+#
+#this corresponds to something called comm.space in functions#
+totalNiche <- Reduce(rbind, output)#
+#
+#plot the points to give some sense of what it looks like#
+#
+#plot(totalNiche[,3]~totalNiche[,2], col=sort(rep(1:6, 20)), pch=20)#
+#
+#create a road map for use#
+#
+roadMap <- matrix(nrow=6, ncol=120, 0)#
+#
+row.names(roadMap) <- unique(totalNiche$species)#
+#
+colnames(roadMap) <- 1:120#
+#
+roadMap[1,1:20] <- 1#
+roadMap[2,21:40] <- 1#
+roadMap[3,41:60] <- 1#
+roadMap[4,61:80] <- 1#
+roadMap[5,81:100] <- 1#
+roadMap[6,101:120] <- 1#
+#
+row.names(roadMap) <- paste("species", 1:6, sep="")
+temp <- synthComm(totalNiche, roadMap)
+library(simpleFDis)#
+library(nicheROVER)#
+#
+#generate six species' niche spaces of 20 observations each in 3 dimensions#
+#
+centroids <- matrix(nrow=6, ncol=3, rep(seq(from = -2, to = 2, length.out=6), 3))#
+#
+#brute force the points#
+#
+output <- list()#
+#
+for(i in 1:6)#
+{#
+	temp1 <- rnorm(n=20, mean=centroids[i,1])#
+	temp2 <- rnorm(n=20, mean=centroids[i,2])#
+	temp3 <- rnorm(n=20, mean=centroids[i,3])#
+	output[[i]] <- data.frame(temp1, temp2, temp3)#
+}#
+#
+#this corresponds to something called comm.space in functions#
+totalNiche <- Reduce(rbind, output)#
+#
+#plot the points to give some sense of what it looks like#
+#
+#plot(totalNiche[,3]~totalNiche[,2], col=sort(rep(1:6, 20)), pch=20)#
+#
+#create a road map for use#
+#
+roadMap <- matrix(nrow=6, ncol=120, 0)#
+#
+row.names(roadMap) <- unique(totalNiche$species)#
+#
+colnames(roadMap) <- 1:120#
+#
+roadMap[1,1:20] <- 1#
+roadMap[2,21:40] <- 1#
+roadMap[3,41:60] <- 1#
+roadMap[4,61:80] <- 1#
+roadMap[5,81:100] <- 1#
+roadMap[6,101:120] <- 1#
+#
+row.names(roadMap) <- paste("species", 1:6, sep="")#
+#
+roadMap <- as.data.frame(roadMap)#
+#
+temp <- synthComm(totalNiche, roadMap)
+calcCenters <- centers(totalNiche, roadMap)
+calcCenters
+meanCenters <- apply(calcCenters, 2, mean)
+meanCenters
+roadMap
+cov.matrix <- cov(calcCenters)
+newCenters <- mvrnorm(n=dim(calcCenters)[1], mu=meanCenters, Sigma=cov.matrix)
+newCenters
+covList <- list()
+indices <- names(roadMap[1,][roadMap[1,] != 0])
+indices
+names(roadMap)
+roadMap[1,][roadMap[1,] != 0]
+roadMap <- as.matrix(roadMap)
+roadMap
+roadMap[1,][roadMap[1,] != 0]
+names(roadMap)
+roadMap <- as.data.frame(roadMap)
+roadMap
+roadMap[1,][roadMap[1,] != 0]
+names(roadMap)
+names(roadMap)[roadMap[1,]!=0]
+names(roadMap)[roadMap[2,]!=0]
+indices <- names(roadMap)[roadMap[1,]!=0]
+indices
+tempPoints <- comm.space[indices,]
+tempPoints <- totalNiche[indices,]
+tempPoints
+covList[[1]] <- cov(tempPoints)
+covList
+distributions <- list()
+distributions[[1]] <- mvrnorm(n=sum(comm.map[1,] != 0), mu=newCenters[1,],#
+			Sigma=covList[[1]])
+distributions[[1]] <- mvrnorm(n=sum(roadMap[1,] != 0), mu=newCenters[1,],#
+			Sigma=covList[[1]])
+distributions
+load_all()
+load_all()
+#generate six species' niche spaces of 20 observations each in 3 dimensions#
+#
+centroids <- matrix(nrow=6, ncol=3, rep(seq(from = -2, to = 2, length.out=6), 3))#
+#
+#brute force the points#
+#
+output <- list()#
+#
+for(i in 1:6)#
+{#
+	temp1 <- rnorm(n=20, mean=centroids[i,1])#
+	temp2 <- rnorm(n=20, mean=centroids[i,2])#
+	temp3 <- rnorm(n=20, mean=centroids[i,3])#
+	output[[i]] <- data.frame(temp1, temp2, temp3)#
+}#
+#
+#this corresponds to something called comm.space in functions#
+totalNiche <- Reduce(rbind, output)#
+#
+#plot the points to give some sense of what it looks like#
+#
+#plot(totalNiche[,3]~totalNiche[,2], col=sort(rep(1:6, 20)), pch=20)#
+#
+#create a road map for use#
+#
+roadMap <- matrix(nrow=6, ncol=120, 0)#
+#
+row.names(roadMap) <- unique(totalNiche$species)#
+#
+colnames(roadMap) <- 1:120#
+#
+roadMap[1,1:20] <- 1#
+roadMap[2,21:40] <- 1#
+roadMap[3,41:60] <- 1#
+roadMap[4,61:80] <- 1#
+roadMap[5,81:100] <- 1#
+roadMap[6,101:120] <- 1#
+#
+row.names(roadMap) <- paste("species", 1:6, sep="")#
+#
+roadMap <- as.data.frame(roadMap)#
+#
+temp <- synthComm(totalNiche, roadMap)
+temp
+fakeCDM <- data.frame(species1=10, species2=11, species3=12, species4=13, species5=14,#
+	species6=15)#
+#
+test <- synthPairwise(comm.cdm=fakeCDM, comm.space=totalNiche, comm.map=roadMap,#
+	cov.matrix=NULL, nsamples=10, nprob=10, alpha=0.95, abundance.weighted="interspecific")
+test
+fakeCDM <- data.frame(species1=10, species2=11, species3=12, species4=13, species5=14,#
+	species6=15)#
+#
+test <- synthPairwise(comm.cdm=fakeCDM, comm.space=totalNiche, comm.map=roadMap,#
+	cov.matrix=NULL, nsamples=10, nprob=10, alpha=0.95, abundance.weighted="interspecific")
+test
+fakeCDM <- data.frame(species1=10, species2=11, species3=12, species4=0, species5=0,#
+	species6=0)#
+fakeCDM <- rbind(fakeCDM, c(0,0,0,9,8,10)
+)
+fakeCDM
+test <- synthPairwise(comm.cdm=fakeCDM[1,], comm.space=totalNiche, comm.map=roadMap,#
+	cov.matrix=NULL, nsamples=10, nprob=10, alpha=0.95, abundance.weighted="interspecific")
+test
+comm.cdm <- cdm[1,]
+comm.cdm <- fakeCDM[1,]
+comm.cdm
+comm.cdm <- comm.cdm[,comm.cdm != 0]
+comm.cdm
+species <- names(comm.cdm)
+species
+comm.map <- roadMap[row.names(roadMap) %in% species,]
+comm.map
+comm.map <- comm.map[,apply(comm.map, 2, sum) != 0]
+comm.map
+totalNiche
+names(comm.map)
+totalNiche[row.names(totalNiche) %in% names(comm.map),]
+comm.map
+names(comm.map)
+names(comm.map)[60]
+names(comm.map)[60] <- "80"
+totalNiche[row.names(totalNiche) %in% names(comm.map),]
+load_all()
+load_all()
+load_all()
+synthNull(fakeCDM, totalNiche, roadMap, nsamples=10, nprob=10)
+roadMap
+roadMap[1,120]
+roadMap[6,120]
+roadMap[6,120] <- 0
+roadMap[1,120] <- 1
+roadMap
+synthNull(fakeCDM, totalNiche, roadMap, nsamples=10, nprob=10)
+#generate six species' niche spaces of 20 observations each in 3 dimensions#
+#
+centroids <- matrix(nrow=6, ncol=3, rep(seq(from = -2, to = 2, length.out=6), 3))#
+#
+#brute force the points#
+#
+output <- list()#
+#
+for(i in 1:6)#
+{#
+	temp1 <- rnorm(n=20, mean=centroids[i,1])#
+	temp2 <- rnorm(n=20, mean=centroids[i,2])#
+	temp3 <- rnorm(n=20, mean=centroids[i,3])#
+	output[[i]] <- data.frame(temp1, temp2, temp3)#
+}#
+#
+#this corresponds to something called comm.space in functions#
+totalNiche <- Reduce(rbind, output)#
+#
+#plot the points to give some sense of what it looks like#
+#
+#plot(totalNiche[,3]~totalNiche[,2], col=sort(rep(1:6, 20)), pch=20)#
+#
+#create a road map for use#
+#
+roadMap <- matrix(nrow=6, ncol=120, 0)#
+#
+row.names(roadMap) <- unique(totalNiche$species)#
+#
+colnames(roadMap) <- 1:120#
+#
+roadMap[1,1:20] <- 1#
+roadMap[2,21:40] <- 1#
+roadMap[3,41:60] <- 1#
+roadMap[4,61:80] <- 1#
+roadMap[5,81:100] <- 1#
+roadMap[6,101:120] <- 1#
+#
+row.names(roadMap) <- paste("species", 1:6, sep="")#
+#
+roadMap <- as.data.frame(roadMap)#
+#
+temp <- synthComm(totalNiche, roadMap)#
+#
+fakeCDM <- data.frame(species1=10, species2=11, species3=12, species4=0, species5=0,#
+	species6=0)#
+fakeCDM <- rbind(fakeCDM, c(0,0,0,9,8,10))#
+#
+test <- synthPairwise(comm.cdm=fakeCDM[1,], comm.space=totalNiche, comm.map=roadMap,#
+	cov.matrix=NULL, nsamples=10, nprob=10, alpha=0.95, abundance.weighted="interspecific")
+test
+class(roadMap)
+class(roadMap)=="data.frame"
+is.data.frame(roadMap)
+is.matrix(roadMap)
+fakeCDM <- data.frame(species1=10, species2=11, species3=12, species4=0, species5=0,#
+	species6=0)#
+fakeCDM <- rbind(fakeCDM, c(0,0,0,9,8,10))#
+#
+row.names(fakeCDM) <- paste("quadrat", 1:2, sep="")#
+#
+test <- synthPairwise(comm.cdm=fakeCDM[1,], comm.space=totalNiche, comm.map=roadMap,#
+	cov.matrix=NULL, nsamples=10, nprob=10, alpha=0.95, abundance.weighted="interspecific")
+test
+fakeCDM
+load_all()
+test2 <- synthNull(cdm=fakeCDM, total.space=totalNiche, total.map=roadMap,#
+	cov.matrix=NULL, nsamples=10, nprob=10, alpha=0.95, abundance.weighted="interspecific")
+results <- c()
+comm.cdm <- fakeCDM[1,]
+comm.cdm
+comm.cdm <- comm.cdm[,comm.cdm != 0]
+species <- names(comm.cdm)
+species
+comm.map <- roadMap[row.names(roadMap) %in% species,]
+comm.map
+comm.map <- comm.map[,apply(comm.map, 2, sum) != 0]
+comm.map
+comm.space <- totalNiche[row.names(totalNiche) %in% names(comm.map),]
+comm.space
+results[1] <- synthPairwise(comm.cdm=comm.cdm, comm.space=comm.space,#
+			comm.map=comm.map, cov.matrix=NULL, nsamples=10, nprob=10,#
+			alpha=0.95, abundance.weighted="interspecific")
+results[1]
+comm.cdm <- cdm[2,]
+comm.cdm <- fakeCDM[2,]
+comm.cdm
+comm.cdm <- comm.cdm[,comm.cdm != 0]
+comm.cdm
+species <- names(comm.cdm)
+species
+comm.map <- roadMap[row.names(roadMap) %in% species,]
+comm.map
+comm.map <- comm.map[,apply(comm.map, 2, sum) != 0]
+comm.map
+comm.space <- totalNiche[row.names(totalNiche) %in% names(comm.map),]
+comm.space
+results[2] <- synthPairwise(comm.cdm=comm.cdm, comm.space=comm.space,#
+			comm.map=comm.map, cov.matrix=NULL, nsamples=10, nprob=10,#
+			alpha=0.95, abundance.weighted="interspecific")
+comm.map
+comm.space
+comm.results
+comm.cdm
+debug(synthPairwise)
+results[2] <- synthPairwise(comm.cdm=comm.cdm, comm.space=comm.space,#
+			comm.map=comm.map, cov.matrix=NULL, nsamples=10, nprob=10,#
+			alpha=0.95, abundance.weighted="interspecific")
+undebug(synthPairwise)
+synthComm(comm.space, comm.map)
+debug(synthComm)
+synthComm(comm.space, comm.map)
+undebug(synthComm)
+undebug(synthComm)
+is.data.frame(comm.map) != TRUE
+calcCenters <- centers(comm.space, comm.map)#
+	meanCenters <- apply(calcCenters, 2, mean)
+meanCenters
+cov.matrix <- cov(calcCenters)
+cov.matrix
+newCenters <- mvrnorm(n=dim(calcCenters)[1], mu=meanCenters, Sigma=cov.matrix)
+newCenters
+covList <- list()#
+	for(i in 1:dim(comm.map)[1])#
+	{#
+		indices <- names(roadMap)[roadMap[i,]!=0]#
+		tempPoints <- comm.space[indices,]#
+		covList[[i]] <- cov(tempPoints)#
+	}
+covList
+indices <- names(roadMap)[roadMap[i,]!=0]
+i
+rm(i)
+indices <- names(roadMap)[roadMap[1,]!=0]
+load_all()
+ls()

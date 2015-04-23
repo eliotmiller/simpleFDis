@@ -3,3 +3,4 @@
 export(FDis)
 export(FDisRandom)
 export(centers)
+export(modifiedMPD)
