@@ -1,4 +1,4 @@
-synthNull <- function(cdm, total.space, total.map, cov.matrix=NULL, nsamples=1000, 
+synthNull <- function(cdm, total.space, total.map, cov.matrix="comm", nsamples=1000, 
 	nprob=1000, alpha=0.95, abundance.weighted=FALSE)
 {
 	#this has been tested with a data frame, not a matrix, so ensure the road map is of
@@ -8,6 +8,26 @@ synthNull <- function(cdm, total.space, total.map, cov.matrix=NULL, nsamples=100
 		stop("total.map must be a data frame")
 	}
 
+	#if cov.matrix is set to overall, use the covariance matrix of all species points in
+	#multivariate space, else set to null and allow subsequent functions to calculate it
+	#per community based on the species present in that community
+	if(cov.matrix=="overall")
+	{
+		calcCenters <- centers(total.space, total.map)
+		cov.matrix <- cov(calcCenters)
+	}
+	
+	else if(cov.matrix=="comm")
+	{
+		cov.matrix <- NULL
+	}
+
+	else
+	{
+		stop("cov.matrix must be set to either overall or comm")
+	}
+	
+	#set up a blank vector to save each quadrat results into
 	results <- c()
 	
 	#for each row in the CDM
@@ -34,7 +54,7 @@ synthNull <- function(cdm, total.space, total.map, cov.matrix=NULL, nsamples=100
 	}
 
 	#convert results into a data frame, where quadrat is the first column
-	output <- data.frame(quadrat=row.names(cdm), results)
+	output <- data.frame(quadrat=row.names(cdm), overlap=results)
 	
 	output
 }
